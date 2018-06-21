@@ -29,6 +29,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+// ensure WP environment
+defined('ABSPATH') or die('WordPress environment missing.');
+
 //register_activation_hook( $file, $function );
 
 //register_deactivation_hook( $file, $function );
