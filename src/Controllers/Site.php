@@ -1,12 +1,12 @@
 <?php
-namespace UHAlerts\Pages;
+namespace UHAlerts\Controllers;
 
 /**
  * Add stuff to the public site pages.
  *
  * @package UHAlerts
  */
-class Site
+class Site extends Base
 {
     public function register()
     {
@@ -17,21 +17,21 @@ class Site
     private function addCss()
     {
         echo '<style>';
-        include UH_ALERTS_PATH.'/assets/uh-alerts.css';
+        include "{$this->plugin_path}/assets/uh-alerts.css";
         echo '</style>';
         // wp_enqueue_style('uh-alerts.css', plugins_url('/uh-alerts.css', __FILE__));
-        // wp_enqueue_style('uh-alerts.css', UH_ALERTS_ROOT.'/assets/uh-alerts.css');
+        // wp_enqueue_style('uh-alerts.css', "{$this->plugin_url}/assets/uh-alerts.css");
     }
 
     private function addJavaScript()
     {
         echo '<script>window.console && window.console.log("uh-alerts active on '.$_SERVER['REMOTE_ADDR'].'");</script>';
         echo '<script>';
-        include UH_ALERTS_PATH.'/assets/uh-alerts.js';
+        include "{$this->plugin_path}/assets/uh-alerts.js";
         echo 'window.UHAlerts({campus:"uhm",debug:true});';
         echo '</script>';
         // wp_enqueue_script('uh-alerts.js', plugins_url('/uh-alerts.js', __FILE__), array(), , true);
-        // wp_enqueue_script('uh-alerts.js', UH_ALERTS_ROOT.'/assets/uh-alerts.js', array(), , true);
+        // wp_enqueue_script('uh-alerts.js', "{$this->plugin_url}/assets/uh-alerts.js", array(), , true);
     }
 
 }

@@ -33,11 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 defined('ABSPATH') or die('WordPress environment missing.');
 
 
-// define some plugin settings
-define('UH_ALERTS_PATH', plugin_dir_path(__FILE__));
-define('UH_ALERTS_ROOT', plugin_dir_url(__FILE__));
-define('UH_ALERTS_PLUGIN', plugin_basename(__FILE__));
-
 // ensure the autoloader exists
 if (is_readable(UH_ALERTS_PATH.'/autoloader.php')) {
     // register the plugin class autoloader

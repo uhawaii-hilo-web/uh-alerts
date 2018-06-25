@@ -16,9 +16,9 @@ final class Init
     public static function getServices()
     {
         return array(
-            Base\SettingsLinks::class,
-            Pages\Admin::class,
-            Pages\Site::class,
+            Controllers\Site::class,
+            Controllers\Admin::class,
+            Controllers\SettingsLinks::class,
         );
     }
 
