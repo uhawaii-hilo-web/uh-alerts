@@ -14,7 +14,7 @@ class Site extends Base
         add_action('wp_footer', array($this, 'addJavaScript'));
     }
 
-    private function addCss()
+    public function addCss()
     {
         echo '<style>';
         include "{$this->plugin_path}/assets/uh-alerts.css";
@@ -23,12 +23,12 @@ class Site extends Base
         // wp_enqueue_style('uh-alerts.css', "{$this->plugin_url}/assets/uh-alerts.css");
     }
 
-    private function addJavaScript()
+    public function addJavaScript()
     {
         echo '<script>window.console && window.console.log("uh-alerts active on '.$_SERVER['REMOTE_ADDR'].'");</script>';
         echo '<script>';
         include "{$this->plugin_path}/assets/uh-alerts.js";
-        echo 'window.UHAlerts({campus:"uhm",debug:true});';
+        echo 'window.UHAlerts({campus:"'.get_option('campus_code').'",refresh_rate:'.get_option('refresh_rate').',debug:true});';
         echo '</script>';
         // wp_enqueue_script('uh-alerts.js', plugins_url('/uh-alerts.js', __FILE__), array(), , true);
         // wp_enqueue_script('uh-alerts.js', "{$this->plugin_url}/assets/uh-alerts.js", array(), , true);

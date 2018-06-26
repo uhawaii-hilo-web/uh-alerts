@@ -1,11 +1,27 @@
+<?php
+$campus_code = get_option('campus_code');
+$refresh_rate = get_option('refresh_rate');
+?>
 <div class="wrap">
     <h1>UH Alerts Plugin Settings</h1>
 
+    <?php settings_errors(); ?>
+
+<!--    <p><strong>campus_code</strong>: --><?php //echo json_encode($campus_code); ?><!--</p>-->
+<!--    <p><strong>refresh_rate</strong>: --><?php //echo json_encode($refresh_rate); ?><!--</p>-->
+<!---->
+<!--    <form method="post" action="options.php">-->
+<!--        --><?php
+//         settings_fields('uhalerts_options_group');
+//         do_settings_sections('uhalerts_plugin');
+//         submit_button();
+//         ?>
+<!--    </form>-->
+<!---->
+<!--    <hr>-->
+
     <form method="post" action="options.php" novalidate="novalidate">
-<!--        <input name="option_page" value="general" type="hidden">-->
-<!--        <input name="action" value="update" type="hidden">-->
-<!--        <input id="_wpnonce" name="_wpnonce" value="076b59da5c" type="hidden">-->
-<!--        <input name="_wp_http_referer" value="/ablog/wp-admin/options-general.php" type="hidden">-->
+        <?php settings_fields('uhalerts_options_group'); ?>
         <table class="form-table">
             <tbody>
             <tr>
@@ -24,12 +40,12 @@
                     <fieldset>
                         <legend><span>How often should the page look for new alerts?</span></legend>
                         <p>
-                            <label><input name="refresh_rate" value="0" type="radio"> Never (only check once on page load)</label><br>
-                            <label><input name="refresh_rate" value="6" type="radio" checked="checked"> Every 6 seconds (10 times per minute)</label><br>
-                            <label><input name="refresh_rate" value="15" type="radio"> Every 15 seconds (4 times per minute)</label><br>
-                            <label><input name="refresh_rate" value="30" type="radio"> Every 30 seconds (twice per minute)</label><br>
-                            <label><input name="refresh_rate" value="60" type="radio"> Every minute</label><br>
-                            <label><input name="refresh_rate" value="300" type="radio"> Every five minutes</label><br>
+                            <label><input name="refresh_rate" value="0" type="radio"<?php echo $refresh_rate == 0 ? ' checked' : ''; ?>> Never (only check once on page load)</label><br>
+                            <label><input name="refresh_rate" value="6" type="radio"<?php echo $refresh_rate == 6 ? ' checked' : ''; ?>> Every 6 seconds (10 times per minute)</label><br>
+                            <label><input name="refresh_rate" value="15" type="radio"<?php echo $refresh_rate == 15 ? ' checked' : ''; ?>> Every 15 seconds (4 times per minute)</label><br>
+                            <label><input name="refresh_rate" value="30" type="radio"<?php echo $refresh_rate == 30 ? ' checked' : ''; ?>> Every 30 seconds (twice per minute)</label><br>
+                            <label><input name="refresh_rate" value="60" type="radio"<?php echo $refresh_rate == 60 ? ' checked' : ''; ?>> Every minute</label><br>
+                            <label><input name="refresh_rate" value="300" type="radio"<?php echo $refresh_rate == 300 ? ' checked' : ''; ?>> Every five minutes</label><br>
                         </p>
                     </fieldset>
                 </td>
@@ -52,19 +68,15 @@
             </tbody>
         </table>
 
-        <p class="submit"><input name="submit" id="submit" class="button button-primary" value="Save Changes" type="submit"></p>
+        <?php submit_button(); ?>
     </form>
-<pre>
-    x = <?php echo json_encode($x ?? null); ?>
-    y = <?php echo json_encode($this->y ?? null); ?>
-</pre>
 </div>
 <script>
     !(function ($, window, document, undefined) {
         var api = 'https://www.hawaii.edu/alert/test/api/1.0';
         var campuses = $('#campuses');
         var campuses_api = api + '/campuses';
-        var current_campus = 'uhh';
+        var current_campus = '<?php echo $campus_code; ?>';
         $.getJSON(campuses_api, function (resp) {
             if (resp && resp.length) {
                 var o = [];
