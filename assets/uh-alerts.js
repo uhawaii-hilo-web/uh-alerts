@@ -11,11 +11,11 @@
     alert_info_url: "", // base url to view specific alert data (read more link with id appended)
     api_url: "", // base url for data (required to function)
     classes: "", // class(es) for css styling
+    debug: false, // show debugging info in the console?,
     element_id: "uh-alerts", // id where the alerts get injected
     refresh_rate: 0, // refresh every n seconds
     region: "", // region / campus code (required to function)
-    wrapper_id: "uh-alerts-wrapper", // id of the whole alerts plugin bucket
-    debug: false // show debugging info in the console?
+    wrapper_id: "uh-alerts-wrapper" // id of the whole alerts plugin bucket
   };
   var running = false;
   var settings, alerts_cache, wrapper, bucket, refresh_timer;
@@ -30,14 +30,16 @@
     }
   }
 
+  function intVal(v) { return parseInt(v, 10); }
   function relativeTime(dt) {
-    var dp = dt.split(' ')[0].split('-').map(function (v) {
-        return parseInt(v, 10)
-      }), tp = dt.split(' ')[1].split(":").map(function (v) {
-        return parseInt(v, 10)
-      }), d = new Date(dp[0], dp[1] - 1, dp[2], tp[0], tp[1], tp[2]), a, e = Math.round((+new Date - d) / 1e3), t = 60,
-      r = 60 * t, n = 24 * r;
-    return 30 > e ? a = "moments ago" : t > e ? a = e + " seconds ago" : 2 * t > e ? a = "a minute ago" : r > e ? a = Math.floor(e / t) + " minutes ago" : 1 === Math.floor(e / r) ? a = "1 hour ago." : n > e ? a = Math.floor(e / r) + " hours ago" : 2 * n > e ? a = "yesterday" : a = Math.floor(e / n) + " days ago", a
+    var dp = dt.split(' ')[0].split('-');
+    var tp = dt.split(' ')[1].split(":");
+    var d = new Date(intVal(dp[0]), intVal(dp[1]) - 1, intVal(dp[2]), intVal(tp[0]), intVal(tp[1]), intVal(tp[2])),
+      e = Math.round((+new Date - d) / 1e3),
+      t = 60,
+      r = 60 * t,
+      n = 24 * r;
+    return 30 > e ? "moments ago" : t > e ? e + " seconds ago" : 2 * t > e ? "a minute ago" : r > e ? Math.floor(e / t) + " minutes ago" : 1 === Math.floor(e / r) ? "1 hour ago." : n > e ? Math.floor(e / r) + " hours ago" : 2 * n > e ? "yesterday" : Math.floor(e / n) + " days ago";
   }
 
   function isOpen() {
@@ -146,17 +148,19 @@
     wrapper = document.getElementById(settings.wrapper_id);
     if (!wrapper) {
       log('creating wrapper');
-      wrapper = document.createElement('div');
+      wrapper = document.createElement('div'); // create the wrapper
       wrapper.id = settings.wrapper_id;
       wrapper.className = 'uh-alerts-wrapper';
-      wrapper.innerHTML = '<p class="uh-alerts-hide-wrapper"><button class="uh-alerts-hide">Hide</button></p>';
-      bucket = document.createElement('div');
+      var inner_div = document.createElement('div'); // create a div inside the wrapper
+      inner_div.innerHTML = '<p class="uh-alerts-hide-wrapper"><button class="uh-alerts-hide">Hide</button></p>';
+      bucket = document.createElement('div'); // create the alerts bucket
       bucket.className = 'uh-alerts-alerts';
       bucket.id = settings.element_id;
-      wrapper.appendChild(bucket);
+      inner_div.appendChild(bucket); // the bucket goes in the inner div
+      wrapper.appendChild(inner_div); // the inner div goes in the wrapper
       var body = document.querySelector('body');
       log('adding wrapper to', body);
-      body && body.insertBefore(wrapper, body.firstElementChild);
+      body && body.insertBefore(wrapper, body.firstElementChild); // the wrapper becomes the first child of the body
     } else {
       log('using existing wrapper');
     }
@@ -176,7 +180,7 @@
   UHAlerts.pause = function () {
     log('pause()');
     if (running) {
-      log('paused');
+      log('paused updates');
       running = false;
       clearInterval(refresh_timer);
     } else {
@@ -187,7 +191,7 @@
   UHAlerts.resume = function () {
     log('resume()');
     if (settings.refresh_rate) {
-      log('resumed');
+      log('resuming updates every ' + settings.refresh_rate + ' seconds');
       running = true;
       getAlerts();
       refresh_timer = setInterval(getAlerts, settings.refresh_rate * 1000);
