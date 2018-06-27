@@ -28,7 +28,7 @@ class Site extends Base
         echo '<script>window.console && window.console.log("uh-alerts active on '.$_SERVER['REMOTE_ADDR'].'");</script>';
         echo '<script>';
         include "{$this->plugin_path}/assets/uh-alerts.js";
-        echo 'window.UHAlerts({'.PHP_EOL;
+        echo 'window.UHAlerts.init({'.PHP_EOL;
         echo 'api_url:"'.UH_ALERTS_API.'"'.PHP_EOL;
         echo ',campus:"'.get_option('uh_alerts_campus_code').'"'.PHP_EOL;
         echo ',refresh_rate:'.get_option('uh_alerts_refresh_rate').PHP_EOL;
