@@ -35,6 +35,7 @@ defined('ABSPATH') or die('WordPress environment missing.');
 
 // define plugin environment path
 define('UH_ALERTS_PATH', plugin_dir_path(__FILE__));
+define('UH_ALERTS_API', 'https://www.hawaii.edu/alert/test/api/1.0');
 
 
 // ensure the autoloader exists

@@ -54,16 +54,18 @@ $style        = get_option('uh_alerts_style');
 
 
 <!--            <tr>-->
-<!--                <th scope="row"><label for="api_root">API Root (URL)</label></th>-->
-<!--                <td><input name="api_root" id="api_root" value="https://www.hawaii.edu/alert/test/api/1.0/" class="regular-text code" type="url"></td>-->
+<!--                <th scope="row"><label for="uh_alerts_api_root">API Root (URL)</label></th>-->
+<!--                <td><input name="uh_alerts_api_root" id="uh_alerts_api_root" value="https://www.hawaii.edu/alert/test/api/1.0" class="regular-text code" type="url"></td>-->
 <!--            </tr>-->
 <!---->
 <!--            <tr>-->
-<!--                <th scope="row">Membership</th>-->
-<!--                <td> <fieldset><legend class="screen-reader-text"><span>Membership</span></legend><label for="users_can_register">-->
-<!--                            <input name="users_can_register" id="users_can_register" value="1" type="checkbox">-->
-<!--                            Anyone can register</label>-->
-<!--                    </fieldset></td>-->
+<!--                <th scope="row"><label for="uh_alerts_api_campuses">API Campuses Route</label></th>-->
+<!--                <td><input name="uh_alerts_api_campuses" id="uh_alerts_api_campuses" value="/campuses" class="regular-text code" type="text"></td>-->
+<!--            </tr>-->
+<!---->
+<!--            <tr>-->
+<!--                <th scope="row"><label for="uh_alerts_api_alerts">API Alerts Route</label></th>-->
+<!--                <td><input name="uh_alerts_api_alerts" id="uh_alerts_api_alerts" value="/alerts/" class="regular-text code" type="text"></td>-->
 <!--            </tr>-->
 
             </tbody>
@@ -74,7 +76,7 @@ $style        = get_option('uh_alerts_style');
 </div>
 <script>
     !(function ($, window, document, undefined) {
-        var api = 'https://www.hawaii.edu/alert/test/api/1.0';
+        var api = '<?php echo UH_ALERTS_API; ?>';
         var campuses = $('#campuses');
         var campuses_api = api + '/campuses';
         var current_campus = '<?php echo $campus_code; ?>';

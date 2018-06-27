@@ -28,7 +28,13 @@ class Site extends Base
         echo '<script>window.console && window.console.log("uh-alerts active on '.$_SERVER['REMOTE_ADDR'].'");</script>';
         echo '<script>';
         include "{$this->plugin_path}/assets/uh-alerts.js";
-        echo 'window.UHAlerts({campus:"'.get_option('uh_alerts_campus_code').'",refresh_rate:'.get_option('uh_alerts_refresh_rate').',classes:"'.get_option('uh_alerts_style').'",debug:true});';
+        echo 'window.UHAlerts({'.PHP_EOL;
+        echo 'api_url:"'.UH_ALERTS_API.'"'.PHP_EOL;
+        echo ',campus:"'.get_option('uh_alerts_campus_code').'"'.PHP_EOL;
+        echo ',refresh_rate:'.get_option('uh_alerts_refresh_rate').PHP_EOL;
+        echo ',classes:"'.get_option('uh_alerts_style').'"'.PHP_EOL;
+        echo ',debug:true'.PHP_EOL;
+        echo '});';
         echo '</script>';
         // wp_enqueue_script('uh-alerts.js', plugins_url('/uh-alerts.js', __FILE__), array(), , true);
         // wp_enqueue_script('uh-alerts.js', "{$this->plugin_url}/assets/uh-alerts.js", array(), , true);

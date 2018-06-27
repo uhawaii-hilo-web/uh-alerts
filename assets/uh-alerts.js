@@ -8,7 +8,7 @@
   window.UHAlerts = function (options) {
     var settings = {
         alert_info_url: "", // base url to view specific alert data (read more link with id appended)
-        api_url: "https://www.hawaii.edu/alert/test/api/1.0/alerts/", // base url for data
+        api_url: "", // base url for data
         campus: "", // campus code
         classes: "", // class(es) for css styling
         element_id: "uh-alerts", // id for css styling
@@ -56,7 +56,7 @@
     function getAlerts() {
       var r = new XMLHttpRequest(), data;
       log('getAlerts()');
-      r.open('GET', settings.api_url + settings.campus, true);
+      r.open('GET', settings.api_url + '/alerts/' + settings.campus, true);
       r.onreadystatechange = function () {
         var o = '';
         if (r.readyState === 4) {
@@ -99,9 +99,9 @@
           settings[attr] = options[attr];
         }
       }
-      if (!settings.campus) {
-        log('no campus specified...aborting.');
-        return; // short circuit if there's no campus code
+      if (!settings.campus || !settings.api_url) {
+        log('missing campus and/or api_url...aborting.');
+        return; // short circuit if there's not enough for the ajax to work
       }
       log(settings);
       bucket = document.getElementById(settings.element_id);
@@ -114,6 +114,7 @@
         log('adding bucket to', body);
         body && body.insertBefore(bucket, body.firstElementChild);
       } else if (settings.classes) {
+        log('using existing bucket');
         bucket.classList.add(settings.classes);
       }
 
@@ -133,6 +134,7 @@
 
       window.addEventListener('keypress', function (ev) {
         if (ev.key === 'Escape' && isOpen()) {
+          log('hiding via escape key');
           hide();
         }
       });
