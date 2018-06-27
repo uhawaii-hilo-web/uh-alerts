@@ -87,7 +87,7 @@ class Admin extends Base
         $args = array(
             array(
                 'option_group' => 'uh_alerts_options_group',
-                'option_name'  => 'uh_alerts_campus_code',
+                'option_name'  => 'uh_alerts_region',
                 'callback'     => array($this, 'optionsGroup'),
             ),
             array(
@@ -121,13 +121,13 @@ class Admin extends Base
     {
         $args = array(
             array(
-                'id'       => 'uh_alerts_campus_code',
+                'id'       => 'uh_alerts_region',
                 'title'    => 'Campus',
                 'callback' => array($this, 'uhAlertsCampus'),
                 'page'     => 'uh_alerts_plugin',
                 'section'  => 'uh_alerts_admin_index',
                 'args'     => array(
-                    'label_for' => 'campus_code',
+                    'label_for' => 'region',
                 ),
             ),
             array(
@@ -162,13 +162,18 @@ class Admin extends Base
 
     public function uhAlertsCampus()
     {
-        $value = esc_attr(get_option('campus_code'));
-        echo '<input type="text" class="regular-text" name="campus_code" value="'.$value.'" placeholder="uhx" />';
+        $value = esc_attr(get_option('uh_alerts_region'));
+        echo '<input type="text" class="regular-text" name="region" value="'.$value.'" />';
     }
 
     public function uhAlertsRefreshRate()
     {
-        $value = esc_attr(get_option('refresh_rate'));
-        echo '<input type="text" class="regular-text" name="refresh_rate" value="'.$value.'" placeholder="number of seconds" />';
+        $value = esc_attr(get_option('uh_alerts_refresh_rate'));
+        echo '<input type="text" class="regular-text" name="refresh_rate" value="'.$value.'" />';
+    }
+    public function uhAlertsStyle()
+    {
+        $value = esc_attr(get_option('uh_alerts_style'));
+        echo '<input type="text" class="regular-text" name="style" value="'.$value.'" />';
     }
 }

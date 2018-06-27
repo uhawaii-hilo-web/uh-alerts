@@ -1,5 +1,5 @@
 <?php
-$campus_code  = get_option('uh_alerts_campus_code');
+$region       = get_option('uh_alerts_region');
 $refresh_rate = get_option('uh_alerts_refresh_rate');
 $style        = get_option('uh_alerts_style');
 ?>
@@ -13,9 +13,9 @@ $style        = get_option('uh_alerts_style');
         <table class="form-table">
             <tbody>
             <tr>
-                <th scope="row">Campus</th>
-                <td id="campuses">
-                    Loading campus list from the UH Alerts API…
+                <th scope="row">Region</th>
+                <td id="regions">
+                    Loading region list from the UH Alerts API…
                 </td>
             </tr>
 
@@ -53,20 +53,20 @@ $style        = get_option('uh_alerts_style');
             </tr>
 
 
-<!--            <tr>-->
-<!--                <th scope="row"><label for="uh_alerts_api_root">API Root (URL)</label></th>-->
-<!--                <td><input name="uh_alerts_api_root" id="uh_alerts_api_root" value="https://www.hawaii.edu/alert/test/api/1.0" class="regular-text code" type="url"></td>-->
-<!--            </tr>-->
-<!---->
-<!--            <tr>-->
-<!--                <th scope="row"><label for="uh_alerts_api_campuses">API Campuses Route</label></th>-->
-<!--                <td><input name="uh_alerts_api_campuses" id="uh_alerts_api_campuses" value="/campuses" class="regular-text code" type="text"></td>-->
-<!--            </tr>-->
-<!---->
-<!--            <tr>-->
-<!--                <th scope="row"><label for="uh_alerts_api_alerts">API Alerts Route</label></th>-->
-<!--                <td><input name="uh_alerts_api_alerts" id="uh_alerts_api_alerts" value="/alerts/" class="regular-text code" type="text"></td>-->
-<!--            </tr>-->
+<!--            <tr>
+                <th scope="row"><label for="uh_alerts_api_root">API Root (URL)</label></th>
+                <td><input name="uh_alerts_api_root" id="uh_alerts_api_root" value="https://www.hawaii.edu/alert/test/api/1.0" class="regular-text code" type="url"></td>
+            </tr> -->
+
+<!--            <tr>
+                <th scope="row"><label for="uh_alerts_api_regions">API Regions Route</label></th>
+                <td><input name="uh_alerts_api_regions" id="uh_alerts_api_regions" value="/campuses" class="regular-text code" type="text"></td>
+            </tr> -->
+
+<!--            <tr>
+                <th scope="row"><label for="uh_alerts_api_alerts">API Alerts Route</label></th>
+                <td><input name="uh_alerts_api_alerts" id="uh_alerts_api_alerts" value="/alerts/" class="regular-text code" type="text"></td>
+            </tr> -->
 
             </tbody>
         </table>
@@ -77,18 +77,18 @@ $style        = get_option('uh_alerts_style');
 <script>
     !(function ($, window, document, undefined) {
         var api = '<?php echo UH_ALERTS_API; ?>';
-        var campuses = $('#campuses');
-        var campuses_api = api + '/campuses';
-        var current_campus = '<?php echo $campus_code; ?>';
-        $.getJSON(campuses_api, function (resp) {
+        var regions = $('#regions');
+        var regions_api = api + '/campuses';
+        var current_region = '<?php echo $region; ?>';
+        $.getJSON(regions_api, function (resp) {
             if (resp && resp.length) {
                 var o = [];
                 for (var i = 0; i < resp.length; i++) {
-                    o.push('<label><input name="uh_alerts_campus_code" value="' + resp[i].code + '" type="radio"' + (resp[i].code == current_campus ? ' checked="checked"' : '') + '> ' + resp[i].campus + '</label><br>');
+                    o.push('<label><input name="uh_alerts_region" value="' + resp[i].code + '" type="radio"' + (resp[i].code == current_region ? ' checked="checked"' : '') + '> ' + resp[i].campus + '</label><br>');
                 }
-                campuses.html(o.join('\n'));
+                regions.html(o.join('\n'));
             } else {
-                campuses.html('Could not load the list campuses from the API. ' + campuses_api);
+                regions.html('Could not load the list regions from the API. ' + regions_api);
             }
         });
     })(jQuery, window, document);

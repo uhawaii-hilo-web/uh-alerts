@@ -8,16 +8,17 @@
   var UHAlerts = {};
   var features = 'querySelector' in document && 'addEventListener' in window && 'classList' in document.createElement('_'); // Feature test
   var defaults = {
-      alert_info_url: "", // base url to view specific alert data (read more link with id appended)
-      api_url: "", // base url for data
-      campus: "", // campus code
-      classes: "", // class(es) for css styling
-      element_id: "uh-alerts", // id where the alerts get injected
-      refresh_rate: 0, // refresh every n seconds
-      debug: false // show debugging info in the console?
-    };
+    alert_info_url: "", // base url to view specific alert data (read more link with id appended)
+    api_url: "", // base url for data (required to function)
+    classes: "", // class(es) for css styling
+    element_id: "uh-alerts", // id where the alerts get injected
+    refresh_rate: 0, // refresh every n seconds
+    region: "", // region / campus code (required to function)
+    wrapper_id: "uh-alerts-wrapper", // id of the whole alerts plugin bucket
+    debug: false // show debugging info in the console?
+  };
   var running = false;
-  var settings, alerts_cache, bucket, refresh_timer;
+  var settings, alerts_cache, wrapper, bucket, refresh_timer;
 
   function log(message1, message2) {
     if (settings.debug && window.console && window.console.log) {
@@ -40,23 +41,23 @@
   }
 
   function isOpen() {
-    return bucket.classList.contains('uh-alerts-active');
+    return wrapper.classList.contains('uh-alerts-active');
   }
 
   function show() {
     log('show()');
-    !isOpen() && bucket.classList.add('uh-alerts-active');
+    !isOpen() && wrapper.classList.add('uh-alerts-active');
   }
 
   function hide() {
     log('hide()');
-    isOpen() && bucket.classList.remove('uh-alerts-active');
+    isOpen() && wrapper.classList.remove('uh-alerts-active');
   }
 
   function getAlerts() {
     var r = new XMLHttpRequest(), data;
     log('getAlerts()');
-    r.open('GET', settings.api_url + '/alerts/' + settings.campus, true);
+    r.open('GET', settings.api_url + '/alerts/' + settings.region, true);
     r.onreadystatechange = function () {
       var o = '';
       if (r.readyState === 4) {
@@ -66,7 +67,7 @@
             data = JSON.parse(r.response);
             if (data && data.length) {
               log('got ' + data.length + ' alerts');
-              o = '<p class="uh-alerts-close-container"><button class="uh-alerts-close">Hide</button></p>';
+              o = '';
               data.forEach(function (i, v) {
                 if (settings.alert_info_url) {
                   o += '<p><a href="' + settings.alert_info_url + i.id + '">' + i.title + '</a>: ' + i.sms_message + ' <span class="uh-alerts-updated">(Updated ' + relativeTime(i.updated_at || i.created_at) + ')</span></p>';
@@ -93,7 +94,7 @@
   }
 
   function hideButtonHandler(ev) {
-    if (ev.target && ev.target.classList.contains('uh-alerts-close')) {
+    if (ev.target && ev.target.classList.contains('uh-alerts-hide')) {
       log('hide button tapped');
       ev.preventDefault();
       ev.stopPropagation();
@@ -108,13 +109,12 @@
     }
   }
 
-
   UHAlerts.destroy = function () {
     if (!settings) { return; }
     log('destroy()');
     document.documentElement.classList.remove('UHAlerts');
-    if (bucket) {
-      bucket.removeEventListener('click', hideButtonHandler);
+    if (wrapper) {
+      wrapper.removeEventListener('click', hideButtonHandler);
     }
     window.removeEventListener('keypress', hideButtonHandler);
     clearTimeout(refresh_timer);
@@ -136,25 +136,32 @@
         settings[attr] = options[attr];
       }
     }
-    // ensure we have a campus and api_url
-    if (!settings.campus || !settings.api_url) {
-      log('missing campus and/or api_url...aborting.');
+    // ensure we have a region and api_url
+    if (!settings.region || !settings.api_url) {
+      log('missing region and/or api_url...aborting.');
       return;
     }
     log(settings);
     // get or build the bucket
-    bucket = document.getElementById(settings.element_id);
-    if (!bucket) {
-      log('creating bucket');
+    wrapper = document.getElementById(settings.wrapper_id);
+    if (!wrapper) {
+      log('creating wrapper');
+      wrapper = document.createElement('div');
+      wrapper.id = settings.wrapper_id;
+      wrapper.className = 'uh-alerts-wrapper';
+      wrapper.innerHTML = '<p class="uh-alerts-hide-wrapper"><button class="uh-alerts-hide">Hide</button></p>';
       bucket = document.createElement('div');
+      bucket.className = 'uh-alerts-alerts';
       bucket.id = settings.element_id;
-      bucket.className = settings.classes;
+      wrapper.appendChild(bucket);
       var body = document.querySelector('body');
-      log('adding bucket to', body);
-      body && body.insertBefore(bucket, body.firstElementChild);
-    } else if (settings.classes) {
-      log('using existing bucket');
-      bucket.classList.add(settings.classes);
+      log('adding wrapper to', body);
+      body && body.insertBefore(wrapper, body.firstElementChild);
+    } else {
+      log('using existing wrapper');
+    }
+    if (settings.classes) {
+      wrapper.classList.add(settings.classes);
     }
     getAlerts();
     if (settings.refresh_rate > 0) {
@@ -162,7 +169,7 @@
       refresh_timer = setInterval(getAlerts, settings.refresh_rate * 1000);
     }
     // add event handlers
-    bucket.addEventListener('click', hideButtonHandler, false);
+    wrapper.addEventListener('click', hideButtonHandler, false);
     window.addEventListener('keypress', hideKeyHandler, false);
   };
 
