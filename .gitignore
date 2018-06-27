@@ -1,1 +1,8 @@
+## IntelliJ IDEA platforms
 .idea*
+
+## MacOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
