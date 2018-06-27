@@ -19,5 +19,6 @@ if (!function_exists('uh_alerts_autoloader')) {
             //trigger_error("$file is not readable by ".__FILE__);
         }
     }
+
     spl_autoload_register('uh_alerts_autoloader');
 }

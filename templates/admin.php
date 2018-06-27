@@ -1,20 +1,12 @@
 <?php
-$campus_code = get_option('uh_alerts_campus_code');
+$campus_code  = get_option('uh_alerts_campus_code');
 $refresh_rate = get_option('uh_alerts_refresh_rate');
-$style = get_option('uh_alerts_style');
+$style        = get_option('uh_alerts_style');
 ?>
 <div class="wrap">
     <h1>UH Alerts Plugin Settings</h1>
 
     <?php settings_errors(); ?>
-
-<!--    <form method="post" action="options.php">-->
-        <?php
-        //settings_fields('uhalerts_options_group');
-        //do_settings_sections('uhalerts_plugin');
-        //submit_button();
-        ?>
-<!--    </form>-->
 
     <form method="post" action="options.php" novalidate="novalidate">
         <?php settings_fields('uh_alerts_options_group'); ?>
@@ -49,9 +41,12 @@ $style = get_option('uh_alerts_style');
                 <td>
                     <fieldset>
                         <p>
-                            <label><input type="radio" name="uh_alerts_style" value="banner"<?php echo $style == 'banner' ? ' checked' : ''; ?>> Top banner<br><?php include UH_ALERTS_PATH.'/assets/top-banner.svg'; ?></label><br>
-                            <label><input type="radio" name="uh_alerts_style" value="toast"<?php echo $style == 'toast' ? ' checked' : ''; ?>> Corner toast<br><?php include UH_ALERTS_PATH.'/assets/toast.svg'; ?></label><br>
-                            <label><input type="radio" name="uh_alerts_style" value="modal"<?php echo $style == 'modal' ? ' checked' : ''; ?>> Modal dialog<br><?php include UH_ALERTS_PATH.'/assets/modal.svg'; ?></label><br>
+                            <label><input type="radio" name="uh_alerts_style" value="banner"<?php echo $style == 'banner' ? ' checked' : ''; ?>> Top banner<br><?php include UH_ALERTS_PATH.'/assets/top-banner.svg'; ?>
+                            </label><br>
+                            <label><input type="radio" name="uh_alerts_style" value="toast"<?php echo $style == 'toast' ? ' checked' : ''; ?>> Corner toast<br><?php include UH_ALERTS_PATH.'/assets/toast.svg'; ?>
+                            </label><br>
+                            <label><input type="radio" name="uh_alerts_style" value="modal"<?php echo $style == 'modal' ? ' checked' : ''; ?>> Modal dialog<br><?php include UH_ALERTS_PATH.'/assets/modal.svg'; ?>
+                            </label><br>
                         </p>
                     </fieldset>
                 </td>
