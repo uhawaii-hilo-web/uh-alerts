@@ -50,7 +50,7 @@ class Admin extends Base
                 'page_title' => 'UH Alerts Plugin',
                 'menu_title' => 'UH Alerts',
                 'capability' => 'manage_options',
-                'menu_slug' => 'uhalerts_plugin',
+                'menu_slug' => 'uh_alerts_plugin',
                 'callback' => array($this, 'index'),
                 'icon_url' => "{$this->plugin_url}/assets/uh-seal-partial-simplified.svg",
                 'position' => 110,
@@ -65,7 +65,7 @@ class Admin extends Base
     {
         $this->sub_pages = array(
             array(
-                'parent_slug' => 'uhalerts_plugin',
+                'parent_slug' => 'uh_alerts_plugin',
                 'page_title' => 'Widget Settings',
                 'menu_title' => 'Widget',
                 'capability' => 'manage_options',
@@ -84,13 +84,18 @@ class Admin extends Base
     {
         $args = array(
             array(
-                'option_group' => 'uhalerts_options_group',
-                'option_name' => 'campus_code',
+                'option_group' => 'uh_alerts_options_group',
+                'option_name' => 'uh_alerts_campus_code',
                 'callback' => array($this, 'optionsGroup'),
             ),
             array(
-                'option_group' => 'uhalerts_options_group',
-                'option_name' => 'refresh_rate',
+                'option_group' => 'uh_alerts_options_group',
+                'option_name' => 'uh_alerts_refresh_rate',
+                'callback' => array($this, 'optionsGroup'),
+            ),
+            array(
+                'option_group' => 'uh_alerts_options_group',
+                'option_name' => 'uh_alerts_style',
                 'callback' => array($this, 'optionsGroup'),
             ),
         );
@@ -101,10 +106,10 @@ class Admin extends Base
     {
         $args = array(
             array(
-                'id' => 'uhalerts_admin_index',
+                'id' => 'uh_alerts_admin_index',
                 'title' => 'Settings',
                 'callback' => array($this, 'uhAlertsAdminSection'),
-                'page' => 'uhalerts_plugin',
+                'page' => 'uh_alerts_plugin',
             )
         );
         $this->settings->setSections($args);
@@ -117,8 +122,8 @@ class Admin extends Base
                 'id' => 'uh_alerts_campus_code',
                 'title' => 'Campus',
                 'callback' => array($this, 'uhAlertsCampus'),
-                'page' => 'uhalerts_plugin',
-                'section' => 'uhalerts_admin_index',
+                'page' => 'uh_alerts_plugin',
+                'section' => 'uh_alerts_admin_index',
                 'args' => array(
                     'label_for' => 'campus_code',
                 ),
@@ -127,11 +132,20 @@ class Admin extends Base
                 'id' => 'uh_alerts_refresh_rate',
                 'title' => 'Refresh Rate',
                 'callback' => array($this, 'uhAlertsRefreshRate'),
-                'page' => 'uhalerts_plugin',
-                'section' => 'uhalerts_admin_index',
+                'page' => 'uh_alerts_plugin',
+                'section' => 'uh_alerts_admin_index',
                 'args' => array(
                 ),
-            )
+            ),
+            array(
+                'id' => 'uh_alerts_style',
+                'title' => 'Display Style',
+                'callback' => array($this, 'uhAlertsStyle'),
+                'page' => 'uh_alerts_plugin',
+                'section' => 'uh_alerts_admin_index',
+                'args' => array(
+                ),
+            ),
         );
         $this->settings->setFields($args);
     }

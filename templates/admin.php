@@ -1,51 +1,57 @@
 <?php
-$campus_code = get_option('campus_code');
-$refresh_rate = get_option('refresh_rate');
+$campus_code = get_option('uh_alerts_campus_code');
+$refresh_rate = get_option('uh_alerts_refresh_rate');
+$style = get_option('uh_alerts_style');
 ?>
 <div class="wrap">
     <h1>UH Alerts Plugin Settings</h1>
 
     <?php settings_errors(); ?>
 
-<!--    <p><strong>campus_code</strong>: --><?php //echo json_encode($campus_code); ?><!--</p>-->
-<!--    <p><strong>refresh_rate</strong>: --><?php //echo json_encode($refresh_rate); ?><!--</p>-->
-<!---->
 <!--    <form method="post" action="options.php">-->
-<!--        --><?php
-//         settings_fields('uhalerts_options_group');
-//         do_settings_sections('uhalerts_plugin');
-//         submit_button();
-//         ?>
+        <?php
+        //settings_fields('uhalerts_options_group');
+        //do_settings_sections('uhalerts_plugin');
+        //submit_button();
+        ?>
 <!--    </form>-->
-<!---->
-<!--    <hr>-->
 
     <form method="post" action="options.php" novalidate="novalidate">
-        <?php settings_fields('uhalerts_options_group'); ?>
+        <?php settings_fields('uh_alerts_options_group'); ?>
         <table class="form-table">
             <tbody>
             <tr>
                 <th scope="row">Campus</th>
                 <td id="campuses">
-                    Loading…
-<!--                    <label><input name="campus_code" value="uhh" checked="checked" type="radio"> UH Hilo</label><br>-->
-<!--                    <label><input name="campus_code" value="uhm" type="radio"> UH Manoa vicinity (includes Outreach College, JABSOM, EWC, RCUH, UHF)</label><br>-->
-<!--                    <label><input name="campus_code" value="hcc" type="radio"> Honolulu CC</label><br>-->
+                    Loading campus list from the UH Alerts API…
                 </td>
             </tr>
 
             <tr>
-                <th scope="row"><label for="refresh_rate">Refresh Rate</label></th>
+                <th scope="row">Refresh Rate</th>
                 <td>
                     <fieldset>
                         <legend><span>How often should the page look for new alerts?</span></legend>
                         <p>
-                            <label><input name="refresh_rate" value="0" type="radio"<?php echo $refresh_rate == 0 ? ' checked' : ''; ?>> Never (only check once on page load)</label><br>
-                            <label><input name="refresh_rate" value="6" type="radio"<?php echo $refresh_rate == 6 ? ' checked' : ''; ?>> Every 6 seconds (10 times per minute)</label><br>
-                            <label><input name="refresh_rate" value="15" type="radio"<?php echo $refresh_rate == 15 ? ' checked' : ''; ?>> Every 15 seconds (4 times per minute)</label><br>
-                            <label><input name="refresh_rate" value="30" type="radio"<?php echo $refresh_rate == 30 ? ' checked' : ''; ?>> Every 30 seconds (twice per minute)</label><br>
-                            <label><input name="refresh_rate" value="60" type="radio"<?php echo $refresh_rate == 60 ? ' checked' : ''; ?>> Every minute</label><br>
-                            <label><input name="refresh_rate" value="300" type="radio"<?php echo $refresh_rate == 300 ? ' checked' : ''; ?>> Every five minutes</label><br>
+                            <label><input name="uh_alerts_refresh_rate" value="0" type="radio"<?php echo $refresh_rate == 0 ? ' checked' : ''; ?>> Never (only check once on page load)</label><br>
+                            <label><input name="uh_alerts_refresh_rate" value="6" type="radio"<?php echo $refresh_rate == 6 ? ' checked' : ''; ?>> Every 6 seconds (10 times per minute)</label><br>
+                            <label><input name="uh_alerts_refresh_rate" value="15" type="radio"<?php echo $refresh_rate == 15 ? ' checked' : ''; ?>> Every 15 seconds (4 times per minute)</label><br>
+                            <label><input name="uh_alerts_refresh_rate" value="30" type="radio"<?php echo $refresh_rate == 30 ? ' checked' : ''; ?>> Every 30 seconds (twice per minute)</label><br>
+                            <label><input name="uh_alerts_refresh_rate" value="60" type="radio"<?php echo $refresh_rate == 60 ? ' checked' : ''; ?>> Every minute</label><br>
+                            <label><input name="uh_alerts_refresh_rate" value="300" type="radio"<?php echo $refresh_rate == 300 ? ' checked' : ''; ?>> Every five minutes</label><br>
+                        </p>
+                    </fieldset>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">Style</th>
+                <td>
+                    <fieldset>
+                        <p>
+                            <label><input type="radio" name="uh_alerts_style" value="banner"<?php echo $style == 'banner' ? ' checked' : ''; ?>> Top banner<br><?php include UH_ALERTS_PATH.'/assets/top-banner.svg'; ?></label><br>
+                            <label><input type="radio" name="uh_alerts_style" value="toast"<?php echo $style == 'toast' ? ' checked' : ''; ?>> Corner toast<br><?php include UH_ALERTS_PATH.'/assets/toast.svg'; ?></label><br>
+                            <label><input type="radio" name="uh_alerts_style" value="modal"<?php echo $style == 'modal' ? ' checked' : ''; ?>> Modal dialog<br><?php include UH_ALERTS_PATH.'/assets/modal.svg'; ?></label><br>
                         </p>
                     </fieldset>
                 </td>
@@ -81,7 +87,7 @@ $refresh_rate = get_option('refresh_rate');
             if (resp && resp.length) {
                 var o = [];
                 for (var i = 0; i < resp.length; i++) {
-                    o.push('<label><input name="campus_code" value="' + resp[i].code + '" type="radio"' + (resp[i].code == current_campus ? ' checked="checked"' : '') + '> ' + resp[i].campus + '</label><br>');
+                    o.push('<label><input name="uh_alerts_campus_code" value="' + resp[i].code + '" type="radio"' + (resp[i].code == current_campus ? ' checked="checked"' : '') + '> ' + resp[i].campus + '</label><br>');
                 }
                 campuses.html(o.join('\n'));
             } else {
