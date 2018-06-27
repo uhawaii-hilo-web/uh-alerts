@@ -1,6 +1,11 @@
+/**
+ * University of Hawaiʻi Emergency Alerts
+ * Copyright 2018 University of Hawaiʻi
+ * @license GPL2
+ */
 !(function (window, document, undefined) {
   "use strict";
-  // die on missing features
+  // die if missing any of these features
   if (!(window.XMLHttpRequest && "classList" in document.documentElement && document.querySelector && document.addEventListener)) {
     return;
   }
@@ -31,6 +36,7 @@
   }
 
   function intVal(v) { return parseInt(v, 10); }
+
   function relativeTime(dt) {
     var dp = dt.split(' ')[0].split('-');
     var tp = dt.split(' ')[1].split(":");
@@ -42,19 +48,19 @@
     return 30 > e ? "moments ago" : t > e ? e + " seconds ago" : 2 * t > e ? "a minute ago" : r > e ? Math.floor(e / t) + " minutes ago" : 1 === Math.floor(e / r) ? "1 hour ago." : n > e ? Math.floor(e / r) + " hours ago" : 2 * n > e ? "yesterday" : Math.floor(e / n) + " days ago";
   }
 
-  function isOpen() {
+  UHAlerts.isOpen = function () {
     return wrapper.classList.contains('uh-alerts-active');
-  }
+  };
 
-  function show() {
+  UHAlerts.show = function () {
     log('show()');
-    !isOpen() && wrapper.classList.add('uh-alerts-active');
-  }
+    !UHAlerts.isOpen() && wrapper.classList.add('uh-alerts-active');
+  };
 
-  function hide() {
+  UHAlerts.hide = function () {
     log('hide()');
-    isOpen() && wrapper.classList.remove('uh-alerts-active');
-  }
+    UHAlerts.isOpen() && wrapper.classList.remove('uh-alerts-active');
+  };
 
   function getAlerts() {
     var r = new XMLHttpRequest(), data;
@@ -70,19 +76,20 @@
             if (data && data.length) {
               log('got ' + data.length + ' alerts');
               o = '';
-              data.forEach(function (i, v) {
+              for (var i = 0; i < data.length; i++) {
+                var m = data[i];
                 if (settings.alert_info_url) {
-                  o += '<p><a href="' + settings.alert_info_url + i.id + '">' + i.title + '</a>: ' + i.sms_message + ' <span class="uh-alerts-updated">(Updated ' + relativeTime(i.updated_at || i.created_at) + ')</span></p>';
+                  o += '<p><a href="' + settings.alert_info_url + m.id + '">' + m.title + '</a>: ' + m.sms_message + ' <span class="uh-alerts-updated">(Updated ' + relativeTime(m.updated_at || m.created_at) + ')</span></p>';
                 } else {
-                  o += '<p><strong>' + i.title + '</strong>: ' + i.sms_message + ' <span class="uh-alerts-updated">(Updated ' + relativeTime(i.updated_at || i.created_at) + ')</span></p>';
+                  o += '<p><strong>' + m.title + '</strong>: ' + m.sms_message + ' <span class="uh-alerts-updated">(Updated ' + relativeTime(m.updated_at || m.created_at) + ')</span></p>';
                 }
-              });
+              }
               bucket.innerHTML = o;
-              show();
+              UHAlerts.show();
             } else {
               log('no alerts');
               bucket.innerHTML = '';
-              hide();
+              UHAlerts.hide();
             }
             alerts_cache = r.response;
           } else {
@@ -100,14 +107,14 @@
       log('hide button tapped');
       ev.preventDefault();
       ev.stopPropagation();
-      hide();
+      UHAlerts.hide();
     }
   }
 
   function hideKeyHandler(ev) {
     if (ev.key === 'Escape' && isOpen()) {
       log('hiding via escape key');
-      hide();
+      UHAlerts.hide();
     }
   }
 
@@ -151,6 +158,7 @@
       wrapper = document.createElement('div'); // create the wrapper
       wrapper.id = settings.wrapper_id;
       wrapper.className = 'uh-alerts-wrapper';
+      wrapper.setAttribute('role', 'alert');
       var inner_div = document.createElement('div'); // create a div inside the wrapper
       inner_div.innerHTML = '<p class="uh-alerts-hide-wrapper"><button class="uh-alerts-hide">Hide</button></p>';
       bucket = document.createElement('div'); // create the alerts bucket
@@ -158,9 +166,7 @@
       bucket.id = settings.element_id;
       inner_div.appendChild(bucket); // the bucket goes in the inner div
       wrapper.appendChild(inner_div); // the inner div goes in the wrapper
-      var body = document.querySelector('body');
-      log('adding wrapper to', body);
-      body && body.insertBefore(wrapper, body.firstElementChild); // the wrapper becomes the first child of the body
+      document.body.insertBefore(wrapper, document.body.firstElementChild); // the wrapper becomes the first child of the body
     } else {
       log('using existing wrapper');
     }

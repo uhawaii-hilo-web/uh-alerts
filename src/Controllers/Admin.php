@@ -100,6 +100,11 @@ class Admin extends Base
                 'option_name'  => 'uh_alerts_style',
                 'callback'     => array($this, 'optionsGroup'),
             ),
+            array(
+                'option_group' => 'uh_alerts_options_group',
+                'option_name'  => 'uh_alerts_debug',
+                'callback'     => array($this, 'optionsGroup'),
+            ),
         );
         $this->settings->setSettings($args);
     }
