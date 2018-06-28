@@ -2,7 +2,7 @@
 namespace UHAlerts\Controllers;
 
 /**
- * Class Base
+ * Base controller class.
  *
  * @package UHAlerts
  */
@@ -38,13 +38,5 @@ class Base
         $this->plugin_url  = plugin_dir_url(dirname(__FILE__, 2));
         $name              = plugin_basename(dirname(__FILE__, 3));
         $this->plugin      = "{$name}/{$name}.php";
-    }
-
-    public function checkboxField($args)
-    {
-        $name    = isset($args['label_for']) ? $args['label_for'] : '';
-        $classes = isset($args['classes']) ? $args['classes'] : '';
-        $checked = get_option($name);
-        echo '<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" class="'.$classes.'"'.($checked ? ' checked="checked"' : '').' />';
     }
 }

@@ -2,7 +2,7 @@
 namespace UHAlerts\Controllers;
 
 /**
- * Class SettingsLinks
+ * Add settings links in the plugins list.
  *
  * @package UHAlerts
  */

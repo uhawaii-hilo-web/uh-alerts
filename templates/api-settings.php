@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package UHAlerts
+ */
 $api_root    = get_option('uh_alerts_api_root') ? get_option('uh_alerts_api_root') : UH_ALERTS_API;
 $api_regions = get_option('uh_alerts_api_regions') ? get_option('uh_alerts_api_regions') : '/campuses/';
 $api_alerts  = get_option('uh_alerts_api_alerts') ? get_option('uh_alerts_api_alerts') : '/alerts/';

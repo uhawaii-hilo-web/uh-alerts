@@ -96,7 +96,7 @@
             log('new data same as cached');
           }
         } else {
-          log(r);
+          log('fetch failed with status ' + r.status);
         }
       }
     };

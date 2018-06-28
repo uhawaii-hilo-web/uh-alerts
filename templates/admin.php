@@ -1,4 +1,7 @@
 <?php
+/**
+ * @package UHAlerts
+ */
 $region       = get_option('uh_alerts_region');
 $refresh_rate = get_option('uh_alerts_refresh_rate');
 $style        = get_option('uh_alerts_style') ? get_option('uh_alerts_style') : 'banner';
@@ -16,8 +19,11 @@ $api_regions  = get_option('uh_alerts_api_regions') ? get_option('uh_alerts_api_
             <tbody>
             <tr>
                 <th scope="row">Region</th>
-                <td id="regions">
-                    Loading region list from the UH Alerts API…
+                <td>
+                    <fieldset>
+                        <legend class="screen-reader-text"><span>List of regions from the API</span></legend>
+                        <p id="regions">Loading region list from the UH Alerts API…</p>
+                    </fieldset>
                 </td>
             </tr>
 
@@ -84,7 +90,7 @@ $api_regions  = get_option('uh_alerts_api_regions') ? get_option('uh_alerts_api_
                     return;
                 }
             }
-            regions.innerText = 'Could not load the regions list from the API. ' + regions_api;
+            regions.innerText = 'Could not load the regions list from the API; you may need to adjust the API settings. ' + regions_api;
         };
         r.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
         r.send();

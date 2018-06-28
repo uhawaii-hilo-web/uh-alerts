@@ -18,12 +18,23 @@ class Settings
      */
     public $sub_pages = array();
 
+    /**
+     * @var array
+     */
     public $settings = array();
+
+    /**
+     * @var array
+     */
     public $sections = array();
+
+    /**
+     * @var array
+     */
     public $fields = array();
 
     /**
-     *
+     * Register the menus and custom fields.
      */
     public function register()
     {
@@ -37,6 +48,8 @@ class Settings
     }
 
     /**
+     * Set the pages.
+     *
      * @param array $pages
      * @return $this
      */
@@ -47,6 +60,12 @@ class Settings
         return $this;
     }
 
+    /**
+     * Include the sub pages with an optional title.
+     *
+     * @param string $title Title
+     * @return $this
+     */
     public function withSubPage($title = null)
     {
         if (!empty($this->admin_pages)) {
@@ -66,6 +85,12 @@ class Settings
         return $this;
     }
 
+    /**
+     * Add sub pages to the list of sub pages.
+     *
+     * @param array $pages Sub pages
+     * @return $this
+     */
     public function addSubPages(array $pages)
     {
         $this->sub_pages = array_merge($this->sub_pages, $pages);
@@ -73,7 +98,9 @@ class Settings
     }
 
     /**
+     * Register the admin and sub pages with WordPress.
      *
+     * @return $this;
      */
     public function addAdminMenu()
     {
@@ -83,26 +110,50 @@ class Settings
         foreach ($this->sub_pages as $page) {
             add_submenu_page($page['parent_slug'], $page['page_title'], $page['menu_title'], $page['capability'], $page['menu_slug'], $page['callback']);
         }
+        return $this;
     }
 
+    /**
+     * Set the custom settings.
+     *
+     * @param array $settings Settings
+     * @return $this
+     */
     public function setSettings(array $settings)
     {
         $this->settings = $settings;
         return $this;
     }
 
+    /**
+     * Set the custom sections.
+     *
+     * @param array $sections Sections
+     * @return $this
+     */
     public function setSections(array $sections)
     {
         $this->sections = $sections;
         return $this;
     }
 
+    /**
+     * Set the custom fields.
+     *
+     * @param array $fields Fields
+     * @return $this
+     */
     public function setFields(array $fields)
     {
         $this->fields = $fields;
         return $this;
     }
 
+    /**
+     * Register all the custom settings, sections, and fields to WordPress.
+     *
+     * @return $this
+     */
     public function registerCustomFields()
     {
         foreach ($this->settings as $setting) {
@@ -119,5 +170,6 @@ class Settings
             // add settings field
             add_settings_field($field['id'], $field['title'], isset($field['callback']) ? $field['callback'] : '', $field['page'], $field['section'], isset($field['args']) ? $field['args'] : '');
         }
+        return $this;
     }
 }

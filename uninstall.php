@@ -8,14 +8,17 @@
 // ensure WP environment
 defined('WP_UNINSTALL_PLUGIN') or die('WordPress environment missing.');
 
-// clear database stored data
-// $books = get_posts(array('post_type' => 'book', 'numberposts' => -1));
-// foreach ($books as $book) {
-//     wp_delete_post($book->ID, true);
-// }
+$options = array(
+    'uh_alerts_region',
+    'uh_alerts_refresh_rate',
+    'uh_alerts_style',
 
-// access the database via SQL
-// global $wpdb;
-// $wpdb->query("DELETE FROM wp_posts WHERE post_type='book'");
-// $wpdb->query("DELETE FROM wp_postmeta WHERE post_id NOT IN (SELECT id FROM wp_posts)");
-// $wpdb->query("DELETE FROM wp_term_relationships WHERE object_id NOT IN (SELECT id FROM wp_posts)");
+    'uh_alerts_api_root',
+    'uh_alerts_api_regions',
+    'uh_alerts_api_alerts',
+    'uh_alerts_debug',
+);
+
+foreach ($options as $option) {
+    delete_option($option);
+}

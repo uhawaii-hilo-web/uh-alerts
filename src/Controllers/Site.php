@@ -8,12 +8,18 @@ namespace UHAlerts\Controllers;
  */
 class Site extends Base
 {
+    /**
+     *
+     */
     public function register()
     {
         add_action('wp_head', array($this, 'addCss'));
         add_action('wp_footer', array($this, 'addJavaScript'));
     }
 
+    /**
+     *
+     */
     public function addCss()
     {
         echo '<style>';
@@ -23,6 +29,9 @@ class Site extends Base
         // wp_enqueue_style('uh-alerts.css', "{$this->plugin_url}/assets/uh-alerts.css");
     }
 
+    /**
+     *
+     */
     public function addJavaScript()
     {
         $api = get_option('uh_alerts_api_root') ? get_option('uh_alerts_api_root') : UH_ALERTS_API;

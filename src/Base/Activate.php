@@ -10,10 +10,13 @@ class Activate
 {
     public static function activate()
     {
-        // generate a custom post type
-        // $this->custom_post_type();
         // register new settings
-        // register_setting();
+        if (!get_option('uh_alerts_api_root')) {
+            update_option('uh_alerts_api_root', UH_ALERTS_API);
+        }
+        if (!get_option('uh_alerts_api_regions')) {
+            update_option('uh_alerts_api_root', '/campuses/');
+        }
         // flush rewrite rules
         flush_rewrite_rules();
     }

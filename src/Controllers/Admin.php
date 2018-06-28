@@ -15,8 +15,18 @@ class Admin extends Base
      */
     protected $settings;
 
+    /**
+     * List of pages.
+     *
+     * @var array
+     */
     protected $pages = array();
 
+    /**
+     * List of sub pages.
+     *
+     * @var array
+     */
     protected $sub_pages = array();
 
     /**
@@ -30,8 +40,6 @@ class Admin extends Base
         $this->setSubPages();
 
         $this->setSettings();
-        //$this->setSections();
-        //$this->setFields();
 
         $this->settings
             ->addPages($this->pages)
@@ -75,19 +83,29 @@ class Admin extends Base
         );
     }
 
+    /**
+     * Main admin settings page.
+     */
     public function index()
     {
         require_once $this->plugin_path.'/templates/admin.php';
     }
 
+    /**
+     * API settings page.
+     */
     public function apiSettings()
     {
         require_once $this->plugin_path.'/templates/api-settings.php';
     }
 
+    /**
+     * Build the list of settings.
+     */
     public function setSettings()
     {
         $args = array(
+            // main options group
             array(
                 'option_group' => 'uh_alerts_options_group',
                 'option_name'  => 'uh_alerts_region',
@@ -103,6 +121,7 @@ class Admin extends Base
                 'option_name'  => 'uh_alerts_style',
                 'callback'     => array($this, 'optionsGroup'),
             ),
+            // api group
             array(
                 'option_group' => 'uh_alerts_api_group',
                 'option_name'  => 'uh_alerts_api_root',
@@ -126,77 +145,9 @@ class Admin extends Base
         );
         $this->settings->setSettings($args);
     }
-/*
-    public function setSections()
-    {
-        $args = array(
-            array(
-                'id'       => 'uh_alerts_admin_index',
-                'title'    => 'Settings',
-                'callback' => array($this, 'uhAlertsAdminSection'),
-                'page'     => 'uh_alerts_plugin',
-            ),
-        );
-        $this->settings->setSections($args);
-    }
 
-    public function setFields()
-    {
-        $args = array(
-            array(
-                'id'       => 'uh_alerts_region',
-                'title'    => 'Campus',
-                'callback' => array($this, 'uhAlertsCampus'),
-                'page'     => 'uh_alerts_plugin',
-                'section'  => 'uh_alerts_admin_index',
-                'args'     => array(
-                    'label_for' => 'region',
-                ),
-            ),
-            array(
-                'id'       => 'uh_alerts_refresh_rate',
-                'title'    => 'Refresh Rate',
-                'callback' => array($this, 'uhAlertsRefreshRate'),
-                'page'     => 'uh_alerts_plugin',
-                'section'  => 'uh_alerts_admin_index',
-                'args'     => array(),
-            ),
-            array(
-                'id'       => 'uh_alerts_style',
-                'title'    => 'Display Style',
-                'callback' => array($this, 'uhAlertsStyle'),
-                'page'     => 'uh_alerts_plugin',
-                'section'  => 'uh_alerts_admin_index',
-                'args'     => array(),
-            ),
-        );
-        $this->settings->setFields($args);
-    }
-*/
     public function optionsGroup($input)
     {
         return $input;
     }
-/*
-    public function uhAlertsAdminSection()
-    {
-        echo 'this is '.__METHOD__;
-    }
-
-    public function uhAlertsCampus()
-    {
-        $value = esc_attr(get_option('uh_alerts_region'));
-        echo '<input type="text" class="regular-text" name="region" value="'.$value.'" />';
-    }
-
-    public function uhAlertsRefreshRate()
-    {
-        $value = esc_attr(get_option('uh_alerts_refresh_rate'));
-        echo '<input type="text" class="regular-text" name="refresh_rate" value="'.$value.'" />';
-    }
-    public function uhAlertsStyle()
-    {
-        $value = esc_attr(get_option('uh_alerts_style'));
-        echo '<input type="text" class="regular-text" name="style" value="'.$value.'" />';
-    }*/
 }
