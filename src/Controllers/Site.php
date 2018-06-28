@@ -40,7 +40,7 @@ class Site extends Base
         echo 'window.UHAlerts.init({'.PHP_EOL;
         echo '  api_url:"'.esc_attr($api).'"'.PHP_EOL;
         echo '  ,region:"'.esc_attr(get_option('uh_alerts_region')).'"'.PHP_EOL;
-        echo '  ,refresh_rate:'.esc_attr(get_option('uh_alerts_refresh_rate')).PHP_EOL;
+        echo '  ,refresh_rate:'.(int)get_option('uh_alerts_refresh_rate').PHP_EOL;
         echo '  ,classes:"'.esc_attr(get_option('uh_alerts_style')).'"'.PHP_EOL;
         echo '  ,debug:!!"'.esc_attr(get_option('uh_alerts_debug')).'"'.PHP_EOL;
         echo '});';
