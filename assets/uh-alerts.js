@@ -95,6 +95,8 @@
           } else {
             log('new data same as cached');
           }
+        } else {
+          log(r);
         }
       }
     };

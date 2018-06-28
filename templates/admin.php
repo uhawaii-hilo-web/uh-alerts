@@ -1,8 +1,9 @@
 <?php
 $region       = get_option('uh_alerts_region');
 $refresh_rate = get_option('uh_alerts_refresh_rate');
-$style        = get_option('uh_alerts_style');
-$debug        = get_option('uh_alerts_debug');
+$style        = get_option('uh_alerts_style') ? get_option('uh_alerts_style') : 'banner';
+$api_root     = get_option('uh_alerts_api_root') ? get_option('uh_alerts_api_root') : UH_ALERTS_API;
+$api_regions  = get_option('uh_alerts_api_regions') ? get_option('uh_alerts_api_regions') : '/campuses';
 ?>
 <div class="wrap">
     <h1>UH Alerts Plugin Settings</h1>
@@ -55,31 +56,6 @@ $debug        = get_option('uh_alerts_debug');
                 </td>
             </tr>
 
-            <tr>
-                <th scope="row">Debugger</th>
-                <td>
-                    <fieldset>
-                        <legend class="screen-reader-text"><span>Debugger</span></legend>
-                        <label><input type="checkbox" name="uh_alerts_debug" value="1" <?php checked('1', $debug); ?> /> Show debugging info in browser console</label>
-                    </fieldset>
-                </td>
-            </tr>
-
-
-<!--            <tr>
-                <th scope="row"><label for="uh_alerts_api_root">API Root (URL)</label></th>
-                <td><input name="uh_alerts_api_root" id="uh_alerts_api_root" value="https://www.hawaii.edu/alert/test/api/1.0" class="regular-text code" type="url"></td>
-            </tr> -->
-
-<!--            <tr>
-                <th scope="row"><label for="uh_alerts_api_regions">API Regions Route</label></th>
-                <td><input name="uh_alerts_api_regions" id="uh_alerts_api_regions" value="/campuses" class="regular-text code" type="text"></td>
-            </tr> -->
-
-<!--            <tr>
-                <th scope="row"><label for="uh_alerts_api_alerts">API Alerts Route</label></th>
-                <td><input name="uh_alerts_api_alerts" id="uh_alerts_api_alerts" value="/alerts/" class="regular-text code" type="text"></td>
-            </tr> -->
 
             </tbody>
         </table>
@@ -88,21 +64,29 @@ $debug        = get_option('uh_alerts_debug');
     </form>
 </div>
 <script>
-    !(function ($, window, document, undefined) {
-        var api = '<?php echo UH_ALERTS_API; ?>';
-        var regions = $('#regions');
-        var regions_api = api + '/campuses';
+    !(function (window, document, undefined) {
+        "use strict";
+        var api = '<?php echo $api_root; ?>';
+        var regions = document.getElementById('regions');
+        var regions_api = api + '<?php echo $api_regions; ?>';
         var current_region = '<?php echo $region; ?>';
-        $.getJSON(regions_api, function (resp) {
-            if (resp && resp.length) {
-                var o = [];
-                for (var i = 0; i < resp.length; i++) {
-                    o.push('<label><input name="uh_alerts_region" value="' + resp[i].code + '" type="radio"' + (resp[i].code == current_region ? ' checked="checked"' : '') + '> ' + resp[i].campus + '</label><br>');
+        var r = new XMLHttpRequest();
+        r.open('GET', regions_api, true);
+        r.onreadystatechange = function () {
+            if (r.readyState === 4) {
+                if (r.status === 200) {
+                    var resp = JSON.parse(r.response);
+                    var o = [];
+                    for (var i = 0; i < resp.length; i++) {
+                        o.push('<label><input type="radio" name="uh_alerts_region" value="' + resp[i].code + '"' + (resp[i].code === current_region ? ' checked="checked"' : '') + '/>' + resp[i].campus + '</label><br/>');
+                    }
+                    regions.innerHTML = o.join('\n');
+                    return;
                 }
-                regions.html(o.join('\n'));
-            } else {
-                regions.html('Could not load the list regions from the API. ' + regions_api);
             }
-        });
-    })(jQuery, window, document);
+            regions.innerText = 'Could not load the regions list from the API. ' + regions_api;
+        };
+        r.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        r.send();
+    })(window, document);
 </script>

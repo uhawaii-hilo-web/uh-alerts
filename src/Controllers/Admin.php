@@ -30,8 +30,8 @@ class Admin extends Base
         $this->setSubPages();
 
         $this->setSettings();
-        $this->setSections();
-        $this->setFields();
+        //$this->setSections();
+        //$this->setFields();
 
         $this->settings
             ->addPages($this->pages)
@@ -66,13 +66,11 @@ class Admin extends Base
         $this->sub_pages = array(
             array(
                 'parent_slug' => 'uh_alerts_plugin',
-                'page_title'  => 'Widget Settings',
-                'menu_title'  => 'Widget',
+                'page_title'  => 'API Settings',
+                'menu_title'  => 'API Settings',
                 'capability'  => 'manage_options',
-                'menu_slug'   => 'uh_alerts_widget',
-                'callback'    => function () {
-                    echo '<h1>UH Alerts Widget Settings</h1><p>Under active development.</p>';
-                },
+                'menu_slug'   => 'uh_alerts_api_settings',
+                'callback'    => array($this, 'apiSettings'),
             ),
         );
     }
@@ -80,6 +78,11 @@ class Admin extends Base
     public function index()
     {
         require_once $this->plugin_path.'/templates/admin.php';
+    }
+
+    public function apiSettings()
+    {
+        require_once $this->plugin_path.'/templates/api-settings.php';
     }
 
     public function setSettings()
@@ -101,14 +104,29 @@ class Admin extends Base
                 'callback'     => array($this, 'optionsGroup'),
             ),
             array(
-                'option_group' => 'uh_alerts_options_group',
+                'option_group' => 'uh_alerts_api_group',
+                'option_name'  => 'uh_alerts_api_root',
+                'callback'     => array($this, 'optionsGroup'),
+            ),
+            array(
+                'option_group' => 'uh_alerts_api_group',
+                'option_name'  => 'uh_alerts_api_regions',
+                'callback'     => array($this, 'optionsGroup'),
+            ),
+            array(
+                'option_group' => 'uh_alerts_api_group',
+                'option_name'  => 'uh_alerts_api_alerts',
+                'callback'     => array($this, 'optionsGroup'),
+            ),
+            array(
+                'option_group' => 'uh_alerts_api_group',
                 'option_name'  => 'uh_alerts_debug',
                 'callback'     => array($this, 'optionsGroup'),
             ),
         );
         $this->settings->setSettings($args);
     }
-
+/*
     public function setSections()
     {
         $args = array(
@@ -154,12 +172,12 @@ class Admin extends Base
         );
         $this->settings->setFields($args);
     }
-
+*/
     public function optionsGroup($input)
     {
         return $input;
     }
-
+/*
     public function uhAlertsAdminSection()
     {
         echo 'this is '.__METHOD__;
@@ -180,5 +198,5 @@ class Admin extends Base
     {
         $value = esc_attr(get_option('uh_alerts_style'));
         echo '<input type="text" class="regular-text" name="style" value="'.$value.'" />';
-    }
+    }*/
 }

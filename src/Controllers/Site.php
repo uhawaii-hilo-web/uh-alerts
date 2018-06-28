@@ -25,14 +25,15 @@ class Site extends Base
 
     public function addJavaScript()
     {
+        $api = get_option('uh_alerts_api_root') ? get_option('uh_alerts_api_root') : UH_ALERTS_API;
         echo '<script>';
         include "{$this->plugin_path}/assets/uh-alerts.min.js";
         echo 'window.UHAlerts.init({'.PHP_EOL;
-        echo '  api_url:"'.UH_ALERTS_API.'"'.PHP_EOL;
-        echo '  ,region:"'.get_option('uh_alerts_region').'"'.PHP_EOL;
-        echo '  ,refresh_rate:'.get_option('uh_alerts_refresh_rate').PHP_EOL;
-        echo '  ,classes:"'.get_option('uh_alerts_style').'"'.PHP_EOL;
-        echo '  ,debug:!!"'.get_option('uh_alerts_debug').'"'.PHP_EOL;
+        echo '  api_url:"'.esc_attr($api).'"'.PHP_EOL;
+        echo '  ,region:"'.esc_attr(get_option('uh_alerts_region')).'"'.PHP_EOL;
+        echo '  ,refresh_rate:'.esc_attr(get_option('uh_alerts_refresh_rate')).PHP_EOL;
+        echo '  ,classes:"'.esc_attr(get_option('uh_alerts_style')).'"'.PHP_EOL;
+        echo '  ,debug:!!"'.esc_attr(get_option('uh_alerts_debug')).'"'.PHP_EOL;
         echo '});';
         echo '</script>';
         // wp_enqueue_script('uh-alerts.js', plugins_url('/uh-alerts.js', __FILE__), array(), , true);
